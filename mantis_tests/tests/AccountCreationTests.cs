@@ -18,18 +18,15 @@ namespace mantis_tests
             using (Stream localFile = File.Open(@"config_inc.php", FileMode.Open))
             {
                 appmanager.Ftp.Upload("/config_inc.php", localFile);
-            }
-                
+            }               
 
         }
 
         [Test]
         public void TestAccountRegistration()
         {
-            AccountData account = new AccountData()
-            {
-                Name = "testuser",
-                Password = "password",
+            AccountData account = new AccountData("testuser", "password")
+            {                
                 Email = "testuser@localhost.localdomain"
             };
             appmanager.Registration.Register(account);
