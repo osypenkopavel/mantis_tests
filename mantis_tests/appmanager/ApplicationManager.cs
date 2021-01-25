@@ -19,6 +19,8 @@ namespace mantis_tests
         protected ManagementMenuHelper managementMenuHelper;
         protected ProjectManagementHelper projectManagementHelper;
 
+        public AdminHelper Admin { get; set; }
+        public APIHelper API { get; set; }
         public RegistrationHelper Registration { get; set; }
         public FtpHelper Ftp { get; set; }
 
@@ -27,12 +29,14 @@ namespace mantis_tests
         private ApplicationManager()
         {
             driver = new ChromeDriver();
-            baseURL = "http://localhost";
+            baseURL = "http://localhost/mantisbt-2.24.4/mantisbt-2.24.4";
             Registration = new RegistrationHelper(this);
             Ftp = new FtpHelper(this);
             loginHelper = new LoginHelper(this);
             managementMenuHelper = new ManagementMenuHelper(this);
             projectManagementHelper = new ProjectManagementHelper(this);
+            Admin = new AdminHelper(this, baseURL);
+            API = new APIHelper(this);
         }
 
          ~ApplicationManager()
@@ -52,7 +56,7 @@ namespace mantis_tests
             if (! appmanager.IsValueCreated)
             {
                 ApplicationManager newInstance = new ApplicationManager();
-                newInstance.Driver.Url = "http://localhost/mantisbt-2.24.4/mantisbt-2.24.4/login_page.php";
+                newInstance.Driver.Url = newInstance.baseURL + "/login_page.php";
                 newInstance.Driver.Manage().Window.Maximize();
                 appmanager.Value = newInstance;
 
