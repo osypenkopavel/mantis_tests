@@ -15,16 +15,29 @@ namespace mantis_tests
         [Test]
         public void DeleteProject()
         {
+            AccountData account = new AccountData()
+            {
+                Name = "administrator",
+                Password = "root"
+            };
+
+            bool projectExists = appmanager.API.GetProjectsList(account).Any();
+
+            if (!projectExists)
+            {
+                appmanager.API.CreateProject(account);
+            }
+
             AddData add = new AddData("Project Test");
             add.Description = "Description Test";
 
             appmanager.Project.CreateProjectIfAbsent(add);
 
-            List<AddData> oldProjects = appmanager.Project.GetProjectsList();
+            List<AddData> oldProjects = appmanager.API.GetProjectsList(account);
 
             appmanager.Project.Remove(0);
 
-            List<AddData> newProjects = appmanager.Project.GetProjectsList();
+            List<AddData> newProjects = appmanager.API.GetProjectsList(account);
             oldProjects.RemoveAt(0);
             oldProjects.Sort();
             newProjects.Sort();

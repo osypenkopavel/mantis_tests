@@ -15,19 +15,28 @@ namespace mantis_tests
             [Test]
             public void AddProject()
             {
-                 List<AddData> oldProjects = appmanager.Project.GetProjectsList();
 
-                 AddData add = new AddData("Project Test");
+                 AccountData account = new AccountData()
+                 {
+                        Name = "administrator",
+                        Password = "root"
+                 };
+
+                 List<AddData> oldProjects = appmanager.API.GetProjectsList(account);
+
+                 AddData add = new AddData("Project Test Mantis");
                  add.Description = "Description Test";
 
                  appmanager.Project.Create(add);
 
-                 List<AddData> newProjects = appmanager.Project.GetProjectsList();
+                 List<AddData> newProjects = appmanager.API.GetProjectsList(account);
 
                  oldProjects.Add(add);
                  oldProjects.Sort();
                  newProjects.Sort();
                  Assert.AreEqual(oldProjects, newProjects);
+            
+
             }        
     }
 }

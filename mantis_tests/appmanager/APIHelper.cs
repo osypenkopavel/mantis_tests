@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenQA.Selenium;
-using SimpleBrowser.WebDriver;
-using System.Text.RegularExpressions;
 
 namespace mantis_tests
 {
@@ -24,7 +18,30 @@ namespace mantis_tests
             issue.category = issueData.Category;
             issue.project = new Mantis.ObjectRef();
             issue.project.id = project.Id;
-            client.mc_issue_add(account.Name, account.Password, issue);
-        }        
+            client.mc_issue_add(account.Name, account.Password, issue);            
+        }
+
+        public void CreateProject(AccountData account)
+        {        
+            var project = new Mantis.ProjectData();            
+            project.name = "Mantis Project";
+            project.id = "10";     
+            Mantis.MantisConnectPortTypeClient projectsList = new Mantis.MantisConnectPortTypeClient();
+            projectsList.mc_project_add(account.Name, account.Password, project);
+        }
+
+        public List<AddData> GetProjectsList(AccountData account)
+        {
+            List<AddData> projects = new List<AddData>();
+            
+            Mantis.MantisConnectPortTypeClient projectsList = new Mantis.MantisConnectPortTypeClient();
+            var projectlist = projectsList.mc_projects_get_user_accessible(account.Name, account.Password);
+
+            foreach ( Mantis.ProjectData element in projectlist)
+            {
+                projects.Add(new AddData(element.name));
+            }
+            return projects;
+        }
     }
 }
